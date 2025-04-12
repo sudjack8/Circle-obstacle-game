@@ -175,15 +175,30 @@
       for (let obs of obstacles) {
         const obsY = obs.y + offsetY;
 				const screenY = obs.y - worldY;
-        if (
-          circleY - radius < obsY + obstacleHeight &&
-          circleY + radius > obsY &&
-          circleX + radius > obs.x &&
-          circleX - radius < obs.x + obs.width
-        ) {
-          endGame("You hit an obstacle!");
-        }
-				
+
+	const circleCenterY = circleY;
+const obsTop = obsY;
+const obsBottom = obsY + obstacleHeight;
+
+// Check if obstacle is within vertical reach of circle
+if (obsBottom > circleCenterY - radius && obsTop < circleCenterY + radius) {
+  // Find vertical distance from circle center to this obstacle slice
+  const dyTop = Math.abs(obsTop - circleCenterY);
+  const dyBottom = Math.abs(obsBottom - circleCenterY);
+
+  // Use the closer edge (safer, tighter detection)
+  const dy = Math.min(dyTop, dyBottom);
+
+  if (dy <= radius) {
+    const dx = Math.sqrt(radius * radius - dy * dy); // Circle's horizontal extent at this height
+    const leftLimit = circleX - dx;
+    const rightLimit = circleX + dx;
+
+    if (rightLimit > obs.x && leftLimit < obs.x + obs.width) {
+      endGame("You hit an obstacle!");
+    }
+  }
+}
 				// Scoring
         if (!obs.passed && obsY > circleY + radius) {
           obs.passed = true;
