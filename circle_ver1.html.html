@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Circle Game</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    #gameCanvas {
+      display: block;
+      background: #222;
+    }
+
+		 #scoreBox {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #000;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 18px;
+      border-radius: 6px;
+      font-family: monospace;
+      z-index: 20;
+		}
+		
+    #controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 10vh;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+      user-select: none;
+    }
+
+    .button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #444;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      border: 2px solid #888;
+      user-select: none;
+    }
+
+    .button:active {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+	<div id="scoreBox">Score: 0</div>
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="controls">
+    <div id="leftBtn" class="button">&#8592;</div>
+    <div id="shrinkBtn" class="button">&#9664;&#9654;</div>
+    <div id="rightBtn" class="button">&#8594;</div>
+  </div>
+	
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const shrinkBtn = document.getElementById('shrinkBtn');
+    const leftBtn = document.getElementById('leftBtn');
+    const rightBtn = document.getElementById('rightBtn');
+		const scoreBox = document.getElementById('scoreBox');
+
+		
+    let width = window.innerWidth;
+    let height = window.innerHeight * 0.9; // reserve 10% for buttons
+    canvas.width = width;
+    canvas.height = height;
+
+    let circleX = width / 2;
+    let initialRadius = width * 0.1; // fixed radius line inside the circle
+    let radius = initialRadius;
+    let growSpeed = 0.005;
+    let shrinkSpeed = growSpeed * 2;
+    let moveSpeed = 4;
+    let shrink = false;
+    let moveLeft = false;
+    let moveRight = false;
+
+    const obstacleHeight = height * 0.04;
+    const spaceBetweenObstacles = height / 3;
+    const obstacles = [];
+
+		let scrollSpeed = 1.5;
+		let speed = 2;
+		const speedIncrement = 0.001;
+    let worldY = 0;
+		let score = 0;
+    let offsetY = 0;
+		let newobs = 0;
+    let gameRunning = true;
+
+    // New for time-based spawning
+    let lastSpawnTime = Date.now();
+    const spawnInterval = 400; // Spawn every 1000ms (1 second)
+
+    function generateObstacle(y) {
+      const side = Math.random() < 0.5 ? 'left' : 'right';
+      const minWidth = width / 4;
+      const maxWidth = width / 2;
+      const obsWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+
+      obstacles.push({
+        x: side === 'left' ? 0 : width - obsWidth,
+        y: y,
+        width: obsWidth,
+        height: obstacleHeight
+      });
+    }
+
+    // Only generate a few obstacles above the screen to scroll in
+    /*
+	  for (let y = -spaceBetweenObstacles * 1; y < 0; y += spaceBetweenObstacles) {
+      generateObstacle(y);
+    }
+		*/
+
+    function update() {
+      if (!gameRunning) return;
+
+			worldY += scrollSpeed;
+			speed += speedIncrement;
+      offsetY += speed; // Top-to-bottom movement
+
+			
+      if (shrink) {
+        radius -= shrinkSpeed;
+        if (radius <= initialRadius) {
+          endGame("You shrank too much!");
+        }
+      } else {
+        radius += growSpeed;
+      }
+			
+
+      if (moveLeft) circleX -= moveSpeed;
+      if (moveRight) circleX += moveSpeed;
+
+      if (circleX - radius < 0) circleX = radius;
+      if (circleX + radius > width) circleX = width - radius;
+
+      // Time-based obstacle spawning
+      const now = Date.now();
+      if (now - lastSpawnTime >= spawnInterval) {
+        generateObstacle(newobs); // Spawn just above view
+				newobs = newobs - spaceBetweenObstacles
+        lastSpawnTime = now;
+      }
+
+      // Collision Detection
+      const circleY = height - radius * 1.4;
+      for (let obs of obstacles) {
+        const obsY = obs.y + offsetY;
+				const screenY = obs.y - worldY;
+        if (
+          circleY - radius < obsY + obstacleHeight &&
+          circleY + radius > obsY &&
+          circleX + radius > obs.x &&
+          circleX - radius < obs.x + obs.width
+        ) {
+          endGame("You hit an obstacle!");
+        }
+				
+				// Scoring
+        if (!obs.passed && obsY > circleY + radius) {
+          obs.passed = true;
+          score++;
+          scoreBox.textContent = `Score: ${score}`;
+					
+				}
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Draw obstacles
+      ctx.fillStyle = 'Blue';
+      for (let obs of obstacles) {
+        const obsY = obs.y + offsetY;
+        if (obsY + obstacleHeight > 0 && obsY < height) {
+          ctx.fillRect(obs.x, obsY, obs.width, obs.height);
+        }
+      }
+
+      // Draw circle
+      const circleY = height - radius * 1.4;
+      ctx.beginPath();
+      ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'yellow';
+      ctx.fill();
+      ctx.closePath();
+			
+			// Draw red inner circle
+ctx.beginPath();
+ctx.arc(circleX, circleY, initialRadius, 0, Math.PI * 2);
+ctx.fillStyle = 'red';
+ctx.fill();
+ctx.closePath();
+
+}
+
+    function loop() {
+      update();
+      draw();
+      if (gameRunning) requestAnimationFrame(loop);
+    }
+
+    function endGame(message) {
+      gameRunning = false;
+      alert(message);
+      location.reload();
+    }
+
+    // Button interactions
+    shrinkBtn.addEventListener('touchstart', e => { e.preventDefault(); shrink = true; });
+    shrinkBtn.addEventListener('touchend', e => { e.preventDefault(); shrink = false; });
+
+    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); moveLeft = true; });
+    leftBtn.addEventListener('touchend', e => { e.preventDefault(); moveLeft = false; });
+
+    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); moveRight = true; });
+    rightBtn.addEventListener('touchend', e => { e.preventDefault(); moveRight = false; });
+
+    document.querySelectorAll('.button').forEach(btn => {
+      btn.style.userSelect = 'none';
+      btn.setAttribute('unselectable', 'on');
+    });
+
+    loop();
+  </script>
+</body>
+</html>
