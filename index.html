@@ -1,3 +1,5 @@
+save below code as “obstackle version 7” 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,11 +14,19 @@
       overflow: hidden;
       touch-action: manipulation;
       font-family: monospace;
+			 user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
 
     #gameCanvas {
       background: #222;
       display: none;
+			 user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
 
     #scoreBox {
@@ -30,40 +40,42 @@
       border-radius: 6px;
       z-index: 20;
       display: none;
+			 user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
+		
+		#controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+	user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
+}
 
-    #controls {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 10vh;
-      background-color: #000;
-      display: none;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 10;
-      user-select: none;
-    }
-
-    .button {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background-color: #444;
-      color: white;
-      font-size: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      border: 2px solid #888;
-      user-select: none;
-    }
-
-    .button:active {
-      background-color: #666;
-    }
+.rectBtn {
+  flex: 1;
+  height: 50px;
+  margin: 0 5px;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 10px;
+	user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
+}
 
     #homeScreen {
       position: absolute;
@@ -78,6 +90,10 @@
       justify-content: center;
       align-items: center;
       z-index: 100;
+			user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
 
     #gameOverScreen {
@@ -93,6 +109,10 @@
       justify-content: center;
       align-items: center;
       z-index: 99;
+			user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
 
     #homeScreen button, #gameOverScreen button {
@@ -103,11 +123,19 @@
       color: white;
       border: none;
       border-radius: 6px;
+			user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
 
     #gameOverMessage {
       font-size: 24px;
       margin-bottom: 10px;
+			user-select: none;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
     }
 
     .unselectable {
@@ -136,13 +164,240 @@
   <div id="scoreBox">Score: 0</div>
 
   <div id="controls">
-    <div id="leftBtn" class="button">&#8592;</div>
-    <div id="shrinkBtn" class="button unselectable">&#9658;&#9668;</div>
-    <div id="rightBtn" class="button">&#8594;</div>
+  <button id="leftBtn" class="rectBtn">←</button>
+  <button id="shrinkBtn" class="rectBtn">o</button>
+  <button id="rightBtn" class="rectBtn">→</button>
   </div>
 
   <script>
-  const _0x19db02=_0x4703;(function(_0x9b1199,_0x1550a9){const _0x44b71c=_0x4703,_0x4ce829=_0x9b1199();while(!![]){try{const _0x34b693=-parseInt(_0x44b71c(0x1bf))/0x1+-parseInt(_0x44b71c(0x1d1))/0x2*(parseInt(_0x44b71c(0x1ea))/0x3)+parseInt(_0x44b71c(0x1ec))/0x4*(-parseInt(_0x44b71c(0x1cc))/0x5)+-parseInt(_0x44b71c(0x1d4))/0x6+parseInt(_0x44b71c(0x1e3))/0x7+parseInt(_0x44b71c(0x1c0))/0x8*(-parseInt(_0x44b71c(0x1c5))/0x9)+-parseInt(_0x44b71c(0x1e0))/0xa*(-parseInt(_0x44b71c(0x1c7))/0xb);if(_0x34b693===_0x1550a9)break;else _0x4ce829['push'](_0x4ce829['shift']());}catch(_0xd1856b){_0x4ce829['push'](_0x4ce829['shift']());}}}(_0x2514,0x99b03));const canvas=document[_0x19db02(0x1c3)](_0x19db02(0x1e4)),ctx=canvas[_0x19db02(0x1e8)]('2d'),shrinkBtn=document[_0x19db02(0x1c3)](_0x19db02(0x1cd)),leftBtn=document[_0x19db02(0x1c3)](_0x19db02(0x1e2)),rightBtn=document[_0x19db02(0x1c3)](_0x19db02(0x1cb)),scoreBox=document[_0x19db02(0x1c3)](_0x19db02(0x1bc)),homeScreen=document[_0x19db02(0x1c3)](_0x19db02(0x1d5)),gameOverScreen=document[_0x19db02(0x1c3)](_0x19db02(0x1c9)),finalScore=document['getElementById']('finalScore'),gameOverMessage=document['getElementById'](_0x19db02(0x1d8));let width=window['innerWidth'],height=window[_0x19db02(0x1df)]*0.9;canvas[_0x19db02(0x1bd)]=width,canvas[_0x19db02(0x1d2)]=height;let circleX,initialRadius,radius,growSpeed,growSpeed2,shrinkSpeed,shrinkSpeed2,moveSpeed,shrink,moveLeft,moveRight,obstacleHeight,spaceBetweenObstacles,obstacles,scrollSpeed,speed,speedIncrement,worldY,offsetY,score,newobs,gameRunning,lastSpawnTime,spawnInterval;function initializeGame(){const _0x592d64=_0x19db02;circleX=width/0x2,initialRadius=width*0.1,radius=initialRadius,growSpeed=0.005,growSpeed2=growSpeed*0x2,shrinkSpeed=growSpeed*0x2,shrinkSpeed2=growSpeed*0x4,moveSpeed=0x4,shrink=![],moveLeft=![],moveRight=![],obstacleHeight=height*0.04,spaceBetweenObstacles=height/0x3,obstacles=[],scrollSpeed=1.5,speed=0x2,speedIncrement=0.001,worldY=0x0,offsetY=0x0,score=0x0,newobs=0x0,gameRunning=!![],lastSpawnTime=Date[_0x592d64(0x1e7)](),spawnInterval=0x190;}function startGame(){const _0x1ebe0f=_0x19db02;homeScreen['style']['display']='none',canvas[_0x1ebe0f(0x1da)][_0x1ebe0f(0x1d6)]='block',document['getElementById'](_0x1ebe0f(0x1be))[_0x1ebe0f(0x1da)][_0x1ebe0f(0x1d6)]=_0x1ebe0f(0x1ca),scoreBox[_0x1ebe0f(0x1da)][_0x1ebe0f(0x1d6)]=_0x1ebe0f(0x1e9),gameOverScreen[_0x1ebe0f(0x1da)][_0x1ebe0f(0x1d6)]='none',initializeGame(),loop();}function restartGame(){const _0x331eb7=_0x19db02;gameOverScreen[_0x331eb7(0x1da)]['display']=_0x331eb7(0x1cf),canvas[_0x331eb7(0x1da)]['display']='block',document[_0x331eb7(0x1c3)](_0x331eb7(0x1be))['style'][_0x331eb7(0x1d6)]=_0x331eb7(0x1ca),scoreBox[_0x331eb7(0x1da)]['display']=_0x331eb7(0x1e9),initializeGame(),loop();}function goHome(){const _0x2274d8=_0x19db02;gameOverScreen['style'][_0x2274d8(0x1d6)]=_0x2274d8(0x1cf),canvas[_0x2274d8(0x1da)][_0x2274d8(0x1d6)]=_0x2274d8(0x1cf),document[_0x2274d8(0x1c3)](_0x2274d8(0x1be))[_0x2274d8(0x1da)][_0x2274d8(0x1d6)]=_0x2274d8(0x1cf),scoreBox[_0x2274d8(0x1da)][_0x2274d8(0x1d6)]=_0x2274d8(0x1cf),homeScreen[_0x2274d8(0x1da)][_0x2274d8(0x1d6)]=_0x2274d8(0x1ca);}function generateObstacle(_0x55ced9){const _0x379025=_0x19db02,_0x5e8ca5=Math[_0x379025(0x1de)]()<0.5?_0x379025(0x1e6):_0x379025(0x1c8),_0x533e9b=width/0x4,_0x55f363=width/0x2,_0x117de=Math[_0x379025(0x1de)]()*(_0x55f363-_0x533e9b)+_0x533e9b;obstacles[_0x379025(0x1c2)]({'x':_0x5e8ca5===_0x379025(0x1e6)?0x0:width-_0x117de,'y':_0x55ced9,'width':_0x117de,'height':obstacleHeight});}function update(){const _0x53ebdf=_0x19db02;if(!gameRunning)return;const _0x69fdf7=width*0.1;worldY+=scrollSpeed,speed+=speedIncrement,offsetY+=speed;if(shrink){if(score<0x32){radius-=shrinkSpeed;if(radius<=initialRadius)endGame(_0x53ebdf(0x1c4));}else{if(score<0x64){radius-=shrinkSpeed2;if(radius<initialRadius)radius=initialRadius;}else{radius-=shrinkSpeed2;const _0x4c858d=width*0.05;initialRadius-=shrinkSpeed2,radius<_0x4c858d&&(radius=_0x4c858d,initialRadius=_0x4c858d);}}}else radius+=growSpeed;if(moveLeft)circleX-=moveSpeed;if(moveRight)circleX+=moveSpeed;if(circleX-radius<0x0)circleX=radius;if(circleX+radius>width)circleX=width-radius;const _0x2f3703=Date['now']();_0x2f3703-lastSpawnTime>=spawnInterval&&(generateObstacle(newobs),newobs-=spaceBetweenObstacles,lastSpawnTime=_0x2f3703);const _0x3f0ddd=height-radius*1.4-0x14;for(let _0x21422f of obstacles){const _0x45c2f5=_0x21422f['y']+offsetY,_0x1285b1=_0x45c2f5,_0x1befd0=_0x45c2f5+obstacleHeight;if(_0x1befd0>_0x3f0ddd-radius&&_0x1285b1<_0x3f0ddd+radius){const _0x5a28e5=Math['min'](Math['abs'](_0x1285b1-_0x3f0ddd),Math[_0x53ebdf(0x1dc)](_0x1befd0-_0x3f0ddd));if(_0x5a28e5<=radius){const _0x398c62=Math['sqrt'](radius*radius-_0x5a28e5*_0x5a28e5),_0x4c747f=circleX-_0x398c62,_0x2da35a=circleX+_0x398c62;_0x2da35a>_0x21422f['x']&&_0x4c747f<_0x21422f['x']+_0x21422f[_0x53ebdf(0x1bd)]&&endGame('You\x20hit\x20an\x20obstacle!');}}!_0x21422f['passed']&&_0x45c2f5>_0x3f0ddd+radius&&(_0x21422f['passed']=!![],score++,scoreBox[_0x53ebdf(0x1eb)]=_0x53ebdf(0x1d0)+score);}}function draw(){const _0x101bb2=_0x19db02;ctx[_0x101bb2(0x1dd)](0x0,0x0,width,height),ctx[_0x101bb2(0x1ba)]='blue';for(let _0x2621cc of obstacles){const _0x5c6420=_0x2621cc['y']+offsetY;_0x5c6420+obstacleHeight>0x0&&_0x5c6420<height&&ctx[_0x101bb2(0x1d9)](_0x2621cc['x'],_0x5c6420,_0x2621cc['width'],_0x2621cc[_0x101bb2(0x1d2)]);}const _0x34b38b=height-radius*1.4-0x14;ctx['beginPath'](),ctx[_0x101bb2(0x1d7)](circleX,_0x34b38b,radius,0x0,Math['PI']*0x2),ctx[_0x101bb2(0x1ba)]=_0x101bb2(0x1ce),ctx['fill'](),ctx['closePath'](),ctx[_0x101bb2(0x1b9)](),ctx['arc'](circleX,_0x34b38b,initialRadius,0x0,Math['PI']*0x2),ctx[_0x101bb2(0x1ba)]=_0x101bb2(0x1bb),ctx[_0x101bb2(0x1e5)](),ctx[_0x101bb2(0x1db)]();}function loop(){const _0xdbdc9d=_0x19db02;scoreBox[_0xdbdc9d(0x1eb)]=_0xdbdc9d(0x1d0)+score,update(),draw();if(gameRunning)requestAnimationFrame(loop);}function _0x4703(_0x373bcf,_0x425230){const _0x25144d=_0x2514();return _0x4703=function(_0x4703b2,_0x3e40c4){_0x4703b2=_0x4703b2-0x1b9;let _0x22a92b=_0x25144d[_0x4703b2];return _0x22a92b;},_0x4703(_0x373bcf,_0x425230);}function endGame(_0x4a223b){const _0x1fa0da=_0x19db02;gameRunning=![],finalScore['textContent']=_0x1fa0da(0x1d0)+score,gameOverMessage['textContent']=_0x4a223b,gameOverScreen[_0x1fa0da(0x1da)][_0x1fa0da(0x1d6)]=_0x1fa0da(0x1ca);}shrinkBtn[_0x19db02(0x1c6)](_0x19db02(0x1c1),_0x496089=>{const _0x2af34d=_0x19db02;_0x496089[_0x2af34d(0x1d3)](),shrink=!![];}),shrinkBtn[_0x19db02(0x1c6)](_0x19db02(0x1e1),_0x364c5d=>{const _0x32e19f=_0x19db02;_0x364c5d[_0x32e19f(0x1d3)](),shrink=![];}),leftBtn[_0x19db02(0x1c6)](_0x19db02(0x1c1),_0x5b2031=>{const _0x5b6f82=_0x19db02;_0x5b2031[_0x5b6f82(0x1d3)](),moveLeft=!![];}),leftBtn[_0x19db02(0x1c6)](_0x19db02(0x1e1),_0x4fed0f=>{_0x4fed0f['preventDefault'](),moveLeft=![];}),rightBtn[_0x19db02(0x1c6)](_0x19db02(0x1c1),_0x4e1e7a=>{const _0x59e6d8=_0x19db02;_0x4e1e7a[_0x59e6d8(0x1d3)](),moveRight=!![];}),rightBtn[_0x19db02(0x1c6)](_0x19db02(0x1e1),_0x43fdeb=>{const _0x16db0e=_0x19db02;_0x43fdeb[_0x16db0e(0x1d3)](),moveRight=![];});function _0x2514(){const _0x324287=['12OCcEaB','textContent','2353484XrvGZm','beginPath','fillStyle','red','scoreBox','width','controls','944245iKaKEW','1535416YgHWKm','touchstart','push','getElementById','You\x20shrank\x20too\x20much!','27FtjNgY','addEventListener','2453GAeEFz','right','gameOverScreen','flex','rightBtn','5nUMQyq','shrinkBtn','yellow','none','Score:\x20','267706LBYnFr','height','preventDefault','1610904deeOkH','homeScreen','display','arc','gameOverMessage','fillRect','style','closePath','abs','clearRect','random','innerHeight','108610suQRTp','touchend','leftBtn','7838579EhprHA','gameCanvas','fill','left','now','getContext','block'];_0x2514=function(){return _0x324287;};return _0x2514();}
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const shrinkBtn = document.getElementById('shrinkBtn');
+    const leftBtn = document.getElementById('leftBtn');
+    const rightBtn = document.getElementById('rightBtn');
+    const scoreBox = document.getElementById('scoreBox');
+    const homeScreen = document.getElementById('homeScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScore = document.getElementById('finalScore');
+    const gameOverMessage = document.getElementById('gameOverMessage');
+		
+		
+    let width = window.innerWidth;
+    let height = window.innerHeight * 0.9;
+    canvas.width = width;
+    canvas.height = height;
+
+    let circleX, initialRadius, radius;
+    let growSpeed, growSpeed2, shrinkSpeed, shrinkSpeed2, moveSpeed;
+    let shrink, moveLeft, moveRight;
+    let obstacleHeight, spaceBetweenObstacles, obstacles;
+    let scrollSpeed, speed, speedIncrement, worldY, offsetY, score, newobs;
+    let gameRunning;
+    let lastSpawnTime, spawnInterval;
+		let minAllowedRadius, addRad;
+
+    function initializeGame() {
+      circleX = width / 2;
+      initialRadius = width * 0.1;
+      radius = initialRadius;
+      growSpeed = 0.005;
+      growSpeed2 = growSpeed * 2;
+      shrinkSpeed = growSpeed * 2;
+      shrinkSpeed2 = growSpeed * 4;
+			minAllowedRadius = initialRadius;
+      addRad = 0.02;
+      moveSpeed = 4;
+      shrink = false;
+      moveLeft = false;
+      moveRight = false;
+
+      obstacleHeight = height * 0.04;
+      spaceBetweenObstacles = height / 3;
+      obstacles = [];
+
+      scrollSpeed = 1.5;
+      speed = 2;
+      speedIncrement = 0.001;
+      worldY = 0;
+      offsetY = 0;
+      score = 0;
+      newobs = 0;
+      gameRunning = true;
+
+      lastSpawnTime = Date.now();
+      spawnInterval = 400;
+    }
+
+    function startGame() {
+      homeScreen.style.display = "none";
+      canvas.style.display = "block";
+      document.getElementById('controls').style.display = "flex";
+      scoreBox.style.display = "block";
+      gameOverScreen.style.display = "none";
+      initializeGame();
+			
+		
+      loop();
+    }
+
+    function restartGame() {
+      gameOverScreen.style.display = "none";
+      canvas.style.display = "block";
+      document.getElementById('controls').style.display = "flex";
+      scoreBox.style.display = "block";
+      initializeGame();
+		
+      loop();
+    }
+
+    function goHome() {
+      gameOverScreen.style.display = "none";
+      canvas.style.display = "none";
+      document.getElementById('controls').style.display = "none";
+      scoreBox.style.display = "none";
+      homeScreen.style.display = "flex";
+    }
+
+    function generateObstacle(y) {
+      const side = Math.random() < 0.5 ? 'left' : 'right';
+      const minWidth = width / 4;
+      const maxWidth = width / 2;
+      const obsWidth = Math.random() * (maxWidth - minWidth) + minWidth;
+
+      obstacles.push({
+        x: side === 'left' ? 0 : width - obsWidth,
+        y: y,
+        width: obsWidth,
+        height: obstacleHeight
+      });
+    }
+
+    function update() {
+      if (!gameRunning) return;
+
+      const intRad = width * 0.1;
+      worldY += scrollSpeed;
+      speed += speedIncrement;
+      offsetY += speed;
+
+      if (shrink) {
+        if (score < 50) {
+          radius -= shrinkSpeed;
+          if (radius <= initialRadius) endGame("You shrank too much!");
+        } else if (score < 100) {
+          radius -= shrinkSpeed2;
+          if (radius < initialRadius) radius = initialRadius;
+        } 
+				else {
+          radius -= shrinkSpeed2;
+          
+					const halfIntRad = width * 0.1 * 0.5;
+  if (minAllowedRadius > halfIntRad) {
+    minAllowedRadius -= addRad;
+    if (minAllowedRadius < halfIntRad) minAllowedRadius = halfIntRad;
+  }
+
+  initialRadius -= shrinkSpeed2;
+  if (radius < minAllowedRadius) {
+    radius = minAllowedRadius;
+    initialRadius = minAllowedRadius;
+  }
+}
+					
+      } else {
+        radius += growSpeed;
+      }
+
+      if (moveLeft) circleX -= moveSpeed;
+      if (moveRight) circleX += moveSpeed;
+      if (circleX - radius < 0) circleX = radius;
+      if (circleX + radius > width) circleX = width - radius;
+
+      const now = Date.now();
+      if (now - lastSpawnTime >= spawnInterval) {
+        generateObstacle(newobs);
+        newobs -= spaceBetweenObstacles;
+        lastSpawnTime = now;
+      }
+
+      const circleY = height - radius * 1.4 - 20;
+      for (let obs of obstacles) {
+        const obsY = obs.y + offsetY;
+        const obsTop = obsY;
+        const obsBottom = obsY + obstacleHeight;
+
+        if (obsBottom > circleY - radius && obsTop < circleY + radius) {
+          const dy = Math.min(Math.abs(obsTop - circleY), Math.abs(obsBottom - circleY));
+          if (dy <= radius) {
+            const dx = Math.sqrt(radius * radius - dy * dy);
+            const leftLimit = circleX - dx;
+            const rightLimit = circleX + dx;
+
+            if (rightLimit > obs.x && leftLimit < obs.x + obs.width) {
+              endGame("You hit an obstacle!");
+            }
+          }
+        }
+
+        if (!obs.passed && obsY > circleY + radius) {
+          obs.passed = true;
+          score++;
+          scoreBox.textContent = `Score: ${score}`;
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.fillStyle = 'blue';
+      for (let obs of obstacles) {
+        const obsY = obs.y + offsetY;
+        if (obsY + obstacleHeight > 0 && obsY < height) {
+          ctx.fillRect(obs.x, obsY, obs.width, obs.height);
+        }
+      }
+
+      const circleY = height - radius * 1.4 - 20;
+      ctx.beginPath();
+      ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
+			if (score < 100) {
+      ctx.fillStyle = 'yellow';
+		  }
+			else {
+			ctx.fillStyle = 'red';	
+			}
+      ctx.fill();
+      ctx.closePath();
+
+      ctx.beginPath();
+      ctx.arc(circleX, circleY, initialRadius, 0, Math.PI * 2);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function loop() {
+      scoreBox.textContent = `Score: ${score}`;
+      update();
+      draw();
+      if (gameRunning) requestAnimationFrame(loop);
+    }
+
+    function endGame(message) {
+      gameRunning = false;
+      finalScore.textContent = "Score: " + score;
+			
+      gameOverMessage.textContent = message;
+      gameOverScreen.style.display = "flex";
+    }
+
+    shrinkBtn.addEventListener('touchstart', e => { e.preventDefault(); shrink = true; });
+    shrinkBtn.addEventListener('touchend', e => { e.preventDefault(); shrink = false; });
+    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); moveLeft = true; });
+    leftBtn.addEventListener('touchend', e => { e.preventDefault(); moveLeft = false; });
+    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); moveRight = true; });
+    rightBtn.addEventListener('touchend', e => { e.preventDefault(); moveRight = false; });
   </script>
 </body>
 </html>
