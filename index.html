@@ -508,8 +508,9 @@
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // Signed up successfully
-        localStorage.setItem("obstackle-username", username);
-        document.getElementById("signup-message").innerText = "";
+        
+        //localStorage.setItem("obstackle-username", username);
+        //document.getElementById("signup-message").innerText = "";
         showGameScreen();
       })
       .catch((error) => {
@@ -532,7 +533,7 @@
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // Logged in successfully
-        localStorage.setItem("obstackle-username", username);
+        //localStorage.setItem("obstackle-username", username);
         document.getElementById("auth-message").innerText = "";
         showGameScreen();
       })
