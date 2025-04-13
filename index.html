@@ -281,10 +281,10 @@ save below code as “obstackle version 7”
       offsetY += speed;
 
       if (shrink) {
-        if (score < 5) {
+        if (score < 50) {
           radius -= shrinkSpeed;
           if (radius <= initialRadius) endGame("You shrank too much!");
-        } else if (score < 10) {
+        } else if (score < 100) {
           radius -= shrinkSpeed2;
           if (radius < initialRadius) radius = initialRadius;
         } 
@@ -361,7 +361,7 @@ save below code as “obstackle version 7”
       const circleY = height - radius * 1.4 - 20;
       ctx.beginPath();
       ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
-			if (score < 10) {
+			if (score < 100) {
       ctx.fillStyle = 'yellow';
 		  }
 			else {
