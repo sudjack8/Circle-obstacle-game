@@ -1,8 +1,29 @@
-save below code as “obstackle version 7” 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	
+	<!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+
+<!-- Firebase Authentication SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8L3gVXfw63UtpIHWLJOdqXxrMGM0lSZg",
+    authDomain: "obstackledb.firebaseapp.com",
+    projectId: "obstackledb",
+    storageBucket: "obstackledb.firebasestorage.app",
+    messagingSenderId: "741143724512",
+    appId: "1:741143724512:web:d99efe0e8ec107f289eb85"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+	
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Obstackle by Impossib1e</title>
@@ -63,7 +84,7 @@ save below code as “obstackle version 7”
 
 .rectBtn {
   flex: 1;
-  height: 70px;
+  height: 50px;
   margin: 0 5px;
   font-size: 24px;
   font-weight: bold;
@@ -147,6 +168,46 @@ save below code as “obstackle version 7”
   </style>
 </head>
 <body>
+	
+	<!-- Auth Container -->
+<div id="auth-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: Arial, sans-serif;">
+
+  <!-- Login Box -->
+  <div id="login-box" style="border: 1px solid #ccc; padding: 30px; border-radius: 10px; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; color: #d3d3d3; ">Login to Obstackle</h2>
+    <input type="text" id="login-username" placeholder="Username" style="width: 100%; margin: 10px 0; padding: 10px;">
+    <input type="password" id="login-password" placeholder="Password" style="width: 100%; margin: 10px 0; padding: 10px;">
+    <button onclick="login()" style="width: 100%; padding: 10px; background-color: #4285f4; color: white; border: none; border-radius: 5px;">Login</button>
+    <p style="margin-top: 15px; text-align: center; color: #d3d3d3;">
+      Don’t have an account? 
+      <span style="color: #4285f4; cursor: pointer;" onclick="toggleAuth()">Sign up here</span>
+    </p>
+    <p id="auth-message" style="color: red; text-align: center;"></p>
+  </div>
+
+  <!-- Signup Box (Hidden Initially) -->
+  <div id="signup-box" style="display: none; border: 1px solid #ccc; padding: 30px; border-radius: 10px; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; color: #d3d3d3;">Create Account</h2>
+    <input type="text" id="signup-username" placeholder="Username" style="width: 100%; margin: 10px 0; padding: 10px;">
+    <input type="password" id="signup-password" placeholder="Password" style="width: 100%; margin: 10px 0; padding: 10px;">
+    <button onclick="signUp()" style="width: 100%; padding: 10px; background-color: #34a853; color: white; border: none; border-radius: 5px;">Sign Up</button>
+    <p style="margin-top: 15px; text-align: center;">
+      Already have an account? 
+      <span style="color: #34a853; cursor: pointer;" onclick="toggleAuth()">Login here</span>
+    </p>
+    <p id="signup-message" style="color: red; text-align: center;"></p>
+  </div>
+
+</div>
+
+<!-- Game Container -->
+<div id="game-container" style="display: none;">
+  <!-- Your game code starts here -->
+	
+<!-- Game Container -->
+<div id="game-container" style="display: none;">
+  <!-- Your existing game.html content starts here -->
+	
   <div id="homeScreen">
     <h1>Obstackle</h1>
     <button onclick="startGame()">Start Game</button>
@@ -399,5 +460,92 @@ save below code as “obstackle version 7”
     rightBtn.addEventListener('touchstart', e => { e.preventDefault(); moveRight = true; });
     rightBtn.addEventListener('touchend', e => { e.preventDefault(); moveRight = false; });
   </script>
+	
+	<script>
+  function toggleAuth() {
+    const loginBox = document.getElementById('login-box');
+    const signupBox = document.getElementById('signup-box');
+
+    if (loginBox.style.display === 'none') {
+      loginBox.style.display = 'block';
+      signupBox.style.display = 'none';
+    } else {
+      loginBox.style.display = 'none';
+      signupBox.style.display = 'block';
+    }
+  }
+</script>
+	
+	<script>
+  document.getElementById('show-signup').addEventListener('click', function (e) {
+    e.preventDefault();
+    document.getElementById('login-box').style.display = 'none';
+    document.getElementById('signup-box').style.display = 'block';
+  });
+
+  document.getElementById('show-login').addEventListener('click', function (e) {
+    e.preventDefault();
+    document.getElementById('signup-box').style.display = 'none';
+    document.getElementById('login-box').style.display = 'block';
+  });
+</script>
+	
+ <script>
+  // SIGN UP FUNCTION
+  function signUp() {
+    const username = document.getElementById("signup-username").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    if (!username || !password) {
+      document.getElementById("signup-message").innerText = "Please fill in all fields.";
+      return;
+    }
+
+    // Use email format by appending domain to username
+    const email = username + "@obstackle.com";
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed up successfully
+        localStorage.setItem("obstackle-username", username);
+        document.getElementById("signup-message").innerText = "";
+        showGameScreen();
+      })
+      .catch((error) => {
+        document.getElementById("signup-message").innerText = error.message;
+      });
+  }
+
+  // LOGIN FUNCTION
+  function login() {
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    if (!username || !password) {
+      document.getElementById("auth-message").innerText = "Please fill in all fields.";
+      return;
+    }
+
+    const email = username + "@obstackle.com";
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Logged in successfully
+        localStorage.setItem("obstackle-username", username);
+        document.getElementById("auth-message").innerText = "";
+        showGameScreen();
+      })
+      .catch((error) => {
+        document.getElementById("auth-message").innerText = error.message;
+      });
+  }
+
+  // Show Game Screen and hide auth screen
+  function showGameScreen() {
+    document.getElementById("auth-container").style.display = "none";
+    document.getElementById("game-container").style.display = "block";
+  }
+</script>
+
 </body>
 </html>
