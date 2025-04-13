@@ -491,30 +491,48 @@
 </script>
 	
  <script>
-  // SIGN UP FUNCTION
+
   function signUp() {
-    const username = document.getElementById("signup-username").value.trim();
-    const password = document.getElementById("signup-password").value;
+  const username = document.getElementById("signup-username").value.trim();
+  const password = document.getElementById("signup-password").value;
 
-    if (!username || !password) {
-      document.getElementById("signup-message").innerText = "Please fill in all fields.";
-      return;
-    }
-
-    // Use email format by appending domain to username
-    const email = username + "@obstackle.com";
-
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed up successfully
-        localStorage.setItem("obstackle-username", username);
-        document.getElementById("signup-message").innerText = "";
-        showGameScreen();
-      })
-      .catch((error) => {
-        document.getElementById("signup-message").innerText = error.message;
-      });
+  if (!username || !password) {
+    document.getElementById("signup-message").innerText = "Please fill in all fields.";
+    return;
   }
+
+  const email = username + "@obstackle.com";
+  const usersRef = firebase.firestore().collection("users");
+
+  // Step 1: Check if username already exists in Firestore
+  usersRef.doc(username).get().then((docSnapshot) => {
+    if (docSnapshot.exists) {
+      document.getElementById("signup-message").innerText = "Username already taken. Try another.";
+    } else {
+      // Step 2: Create user with Firebase Auth
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Step 3: Store username in Firestore
+          return usersRef.doc(username).set({
+            uid: userCredential.user.uid,
+            highScore: 0,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        })
+        .then(() => {
+          // Save to localStorage and show game
+          localStorage.setItem("obstackle-username", username);
+          document.getElementById("signup-message").innerText = "";
+          showGameScreen();
+        })
+        .catch((error) => {
+          document.getElementById("signup-message").innerText = error.message;
+        });
+    }
+  }).catch((error) => {
+    document.getElementById("signup-message").innerText = "Error checking username: " + error.message;
+  });
+}
 
   // LOGIN FUNCTION
   function login() {
