@@ -7,10 +7,12 @@
     
     <!-- Firebase SDKs -->
 <script type="module">
+  // Firebase imports
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+  // Firebase config and init
   const firebaseConfig = {
     apiKey: "AIzaSyA8L3gVXfw63UtpIHWLJOdqXxrMGM0lSZg",
     authDomain: "obstackledb.firebaseapp.com",
@@ -24,7 +26,73 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // We will use these below when we write the login/signup logic
+  // DOM elements
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const message = document.getElementById("auth-message");
+
+  // Signup function
+  async function signup() {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      message.textContent = "Please fill in both fields.";
+      return;
+    }
+
+    const userDocRef = doc(db, "users", username);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      message.textContent = "Username already taken. Try a different one.";
+      return;
+    }
+
+    try {
+      const fakeEmail = username + "@obstackle.com";
+
+      const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, password);
+      await setDoc(userDocRef, {
+        uid: userCredential.user.uid,
+        highScore: 0
+      });
+
+      message.textContent = "Signup successful! Redirecting...";
+      setTimeout(() => {
+        localStorage.setItem("username", username);
+        window.location.href = "game.html";
+      }, 1000);
+
+    } catch (error) {
+      message.textContent = "Signup failed: " + error.message;
+    }
+  }
+
+  // Login function
+  async function login() {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      message.textContent = "Please fill in both fields.";
+      return;
+    }
+
+    const fakeEmail = username + "@obstackle.com";
+
+    try {
+      await signInWithEmailAndPassword(auth, fakeEmail, password);
+      message.textContent = "Login successful! Redirecting...";
+      setTimeout(() => {
+        localStorage.setItem("username", username);
+        window.location.href = "game.html";
+      }, 1000);
+
+    } catch (error) {
+      message.textContent = "Login failed: " + error.message;
+    }
+  }
 </script>
     
 </head>
