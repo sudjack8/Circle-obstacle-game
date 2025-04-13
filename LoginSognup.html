@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup</title>
+</head>
+<body>
+    <h2>Login or Sign Up</h2>
+    
+    <!-- Login Form -->
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    
+    <p>Don't have an account? <button id="showSignupForm">Sign Up</button></p>
+
+    <!-- Signup Form (Hidden initially) -->
+    <div id="signupForm" style="display: none;">
+        <h3>Sign Up</h3>
+        <form id="signupFormForm">
+            <input type="text" id="newUsername" placeholder="New Username" required>
+            <input type="password" id="newPassword" placeholder="New Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <button id="showLoginForm">Login</button></p>
+    </div>
+
+    <script src="firebase-config.js"></script> <!-- Firebase config file -->
+    <script src="auth.js"></script> <!-- JS logic for login/signup -->
+</body>
+</html>
