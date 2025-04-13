@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login / Signup</title>
+    
+    <!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8L3gVXfw63UtpIHWLJOdqXxrMGM0lSZg",
+    authDomain: "obstackledb.firebaseapp.com",
+    projectId: "obstackledb",
+    storageBucket: "obstackledb.firebasestorage.app",
+    messagingSenderId: "741143724512",
+    appId: "1:741143724512:web:d99efe0e8ec107f289eb85"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // We will use these below when we write the login/signup logic
+</script>
+    
 </head>
 <body>
     <h2>Login or Sign Up</h2>
