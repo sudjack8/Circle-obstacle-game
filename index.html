@@ -499,12 +499,12 @@
     function endGame(message) {
       gameRunning = false;
       finalScore.textContent = "Score: " + score;
-			//saveScore(score);
+		saveScore(score);
       
       //if (score > highestScore)
       //{highestScore = score;}
       
-      highestScore.textContent = "Highest Score: " + score;
+      //highestScore.textContent = "Highest Score: " + score;
       
       gameOverMessage.textContent = message;
       gameOverScreen.style.display = "flex";
