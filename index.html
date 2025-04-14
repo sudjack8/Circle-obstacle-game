@@ -476,11 +476,13 @@
     .then(snapshot => {
       const currentHighScore = snapshot.val()?.highScore || 0;
       highestScoreVar = currentHighScore;
+      console.log("Server igh score:", highestScoreVar, "New score:", score);
 
       console.log("Current high score:", currentHighScore, "New score:", score);
 
       if (score > currentHighScore) {
         highestScoreVar = score;
+        console.log("Server igh score:", highestScoreVar, "New score:", score);
         return userScoreRef.set({ highScore: score });
         
       } else {
