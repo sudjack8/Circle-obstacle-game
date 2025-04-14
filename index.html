@@ -268,7 +268,7 @@
     let gameRunning;
     let lastSpawnTime, spawnInterval;
 		let minAllowedRadius, addRad;
-    let highestScore = 0;
+    let highestScore;
 
     function initializeGame() {
       circleX = width / 2;
@@ -459,6 +459,7 @@
     }
     
    function saveScore(score) {
+    highestScore = 0;
   // Ensure user is authenticated before proceeding
   const user = firebase.auth().currentUser;
 
