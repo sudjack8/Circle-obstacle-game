@@ -497,12 +497,11 @@
     });
 }
 
-
     function endGame(message) {
-      gameRunning = false;
-      finalScore.textContent = "Score: " + score;
-		//saveScore(score);
-      const user2 = firebase.auth().currentUser;
+  gameRunning = false;
+  finalScore.textContent = "Score: " + score;
+
+  const user2 = firebase.auth().currentUser;
 
   if (!user2) {
     console.warn("User is not authenticated yet.");
@@ -510,23 +509,25 @@
   }
 
   const uid2 = user2.uid;
-  const userScoreRef2 = firebase.database().ref("scores/" + uid);
+  const userScoreRef2 = firebase.database().ref("scores/" + uid2);
 
   userScoreRef2.once("value")
     .then(snapshot => {
       const currentHighScore2 = snapshot.val()?.highScore || 0;
       highestScoreVar = currentHighScore2;
-      
-      //const serverHighScore = await saveScore(score);
-      
-      if (score > highestScoreVar)
-       {highestScoreVar = score;}
-      
+
+      // const serverHighScore = await saveScore(score); // If used, make the function async
+
+      if (score > highestScoreVar) {
+        highestScoreVar = score;
+      }
+
       highestScore.textContent = "Highest Score: " + highestScoreVar;
-      
+
       gameOverMessage.textContent = message;
       gameOverScreen.style.display = "flex";
-    }
+    }); // <-- Closing .then
+} // <-- Closing endGame function
 
     shrinkBtn.addEventListener('touchstart', e => { e.preventDefault(); shrink = true; });
     shrinkBtn.addEventListener('touchend', e => { e.preventDefault(); shrink = false; });
