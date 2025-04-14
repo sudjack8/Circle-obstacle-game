@@ -459,7 +459,7 @@
       if (gameRunning) requestAnimationFrame(loop);
     }
     
-   async function saveScore(score) {
+   function saveScore(score) {
     highestScoreVar = 0;
   // Ensure user is authenticated before proceeding
   const user = firebase.auth().currentUser;
@@ -498,7 +498,7 @@
 }
 
 
-    async function endGame(message) {
+    function endGame(message) {
       gameRunning = false;
       finalScore.textContent = "Score: " + score;
 		//saveScore(score);
@@ -517,7 +517,7 @@
       const currentHighScore2 = snapshot.val()?.highScore || 0;
       highestScoreVar = currentHighScore2;
       
-      const serverHighScore = await saveScore(score);
+      //const serverHighScore = await saveScore(score);
       
       if (score > highestScoreVar)
        {highestScoreVar = score;}
