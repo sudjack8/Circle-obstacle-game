@@ -476,13 +476,11 @@
     .then(snapshot => {
       const currentHighScore = snapshot.val()?.highScore || 0;
       highestScoreVar = currentHighScore;
-      console.log("Server igh score:", highestScoreVar, "New score:", score);
 
       console.log("Current high score:", currentHighScore, "New score:", score);
 
       if (score > currentHighScore) {
         highestScoreVar = score;
-        console.log("Server igh score:", highestScoreVar, "New score:", score);
         return userScoreRef.set({ highScore: score });
         
       } else {
@@ -504,10 +502,23 @@
       gameRunning = false;
       finalScore.textContent = "Score: " + score;
 		//saveScore(score);
+      const user2 = firebase.auth().currentUser;
+
+  if (!user2) {
+    console.warn("User is not authenticated yet.");
+    return null;
+  }
+
+  const uid2 = user2.uid;
+  const userScoreRef2 = firebase.database().ref("scores/" + uid);
+
+  userScoreRef2.once("value")
+    .then(snapshot => {
+      const currentHighScore2 = snapshot.val()?.highScore || 0;
+      highestScoreVar = currentHighScore2;
       
       const serverHighScore = await saveScore(score);
       
-      console.log("Server igh score:", highestScoreVar, "New score:", score);
       if (score > highestScoreVar)
        {highestScoreVar = score;}
       
