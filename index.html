@@ -228,6 +228,7 @@
   <div id="gameOverScreen">
     <div id="gameOverMessage">Game Over!</div>
     <div id="finalScore">Score: 0</div>
+    <div id="highestScore">Score: 0</div>
     <button onclick="restartGame()">Retry</button>
     <button onclick="goHome()">Home</button>
   </div>
@@ -267,6 +268,7 @@
     let gameRunning;
     let lastSpawnTime, spawnInterval;
 		let minAllowedRadius, addRad;
+    let highestScore = 0;
 
     function initializeGame() {
       circleX = width / 2;
@@ -471,11 +473,13 @@
   userScoreRef.once("value")
     .then(snapshot => {
       const currentHighScore = snapshot.val()?.highScore || 0;
+      highestScore = currentHighScore;
 
       console.log("Current high score:", currentHighScore, "New score:", score);
 
       if (score > currentHighScore) {
         return userScoreRef.set({ highScore: score });
+        highestScore = score;
       } else {
         console.log("Score is not higher. No update needed.");
         return null; // still return a promise
@@ -494,6 +498,12 @@
       gameRunning = false;
       finalScore.textContent = "Score: " + score;
 			saveScore(score);
+      
+      if (score > highestScore)
+      {highestScore = score;}
+      
+      highestScore.textContent = "Highest Score: " + highestScore;
+      
       gameOverMessage.textContent = message;
       gameOverScreen.style.display = "flex";
     }
