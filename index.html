@@ -456,48 +456,38 @@
       if (gameRunning) requestAnimationFrame(loop);
     }
     
-    function saveScore(score) {
-    console.log("saveScore called with score:", score);
-    firebase.database().ref("testConnection").set({
-  connected: true,
-  timestamp: Date.now()
-}).then(() => {
-  console.log("Realtime DB is connected and write was successful!");
-}).catch((error) => {
-  console.error("Realtime DB write failed:", error);
-});
-    
-    const username = localStorage.getItem("obstackle-username");
-    if (!username) {
-      console.warn("No username found in localStorage.");
-      return;
-    }
+   function saveScore(score) {
+  // Ensure user is authenticated before proceeding
+  const user = firebase.auth().currentUser;
 
-    const userRef = firebase.database().ref("users/" + username);
-
-    userRef.once("value")
-      .then((snapshot) => {
-        const data = snapshot.val();
-        const currentHighScore = data && data.highScore ? data.highScore : 0;
-
-        console.log("Current high score:", currentHighScore, "New score:", score);
-
-        if (!data || score > currentHighScore) {
-          userRef.set({ highScore: score })
-            .then(() => {
-              console.log("High score saved to Realtime Database:", score);
-            })
-            .catch((error) => {
-              console.error("Error saving score:", error);
-            });
-        } else {
-          console.log("Score not higher than existing high score. No update needed.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
+  if (!user) {
+    console.warn("User is not authenticated yet.");
+    return;
   }
+
+  const uid = user.uid;
+  const userScoreRef = firebase.database().ref("scores/" + uid);
+
+  userScoreRef.once("value")
+    .then(snapshot => {
+      const currentHighScore = snapshot.val()?.highScore || 0;
+
+      console.log("Current high score:", currentHighScore, "New score:", score);
+
+      if (score > currentHighScore) {
+        return userScoreRef.set({ highScore: score });
+      } else {
+        console.log("Score is not higher. No update needed.");
+        return null; // still return a promise
+      }
+    })
+    .then(() => {
+      console.log("High score check complete.");
+    })
+    .catch(error => {
+      console.error("Error accessing/updating score:", error);
+    });
+}
 
 
     function endGame(message) {
