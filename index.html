@@ -498,18 +498,17 @@
 
     function endGame(message) {
   gameRunning = false;
+  
+  saveScore(score);
+  
   finalScore.textContent = "Score: " + score;
-
   const user2 = firebase.auth().currentUser;
-
   if (!user2) {
     console.warn("User is not authenticated yet.");
     return null;
   }
-
   const uid2 = user2.uid;
   const userScoreRef2 = firebase.database().ref("scores/" + uid2);
-
   userScoreRef2.once("value")
     .then(snapshot => {
       const currentHighScore2 = snapshot.val()?.highScore || 0;
