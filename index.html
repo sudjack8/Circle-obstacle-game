@@ -459,14 +459,14 @@
       if (gameRunning) requestAnimationFrame(loop);
     }
     
-   function saveScore(score) {
+   async function saveScore(score) {
     highestScore = 0;
   // Ensure user is authenticated before proceeding
   const user = firebase.auth().currentUser;
 
   if (!user) {
     console.warn("User is not authenticated yet.");
-    return;
+    return null;
   }
 
   const uid = user.uid;
@@ -480,8 +480,9 @@
       console.log("Current high score:", currentHighScore, "New score:", score);
 
       if (score > currentHighScore) {
-        return userScoreRef.set({ highScore: score });
         highestScore = score;
+        return userScoreRef.set({ highScore: score });
+        
       } else {
         console.log("Score is not higher. No update needed.");
         return null; // still return a promise
@@ -492,20 +493,23 @@
     })
     .catch(error => {
       console.error("Error accessing/updating score:", error);
+    return null;
     });
 }
 
 
-    function endGame(message) {
+    async function endGame(message) {
       gameRunning = false;
       finalScore.textContent = "Score: " + score;
-		saveScore(score);
+		//saveScore(score);
+      
+      const serverHighScore = await saveScore(score);
       
       console.log("Server igh score:", highestScore, "New score:", score);
-      //if (score > highestScore)
-      //{highestScore = score;}
+      if (score > highestScore)
+       {highestScore = score;}
       
-      //highestScore.textContent = "Highest Score: " + score;
+      highestScore.textContent = "Highest Score: " + highestScore;
       
       gameOverMessage.textContent = message;
       gameOverScreen.style.display = "flex";
