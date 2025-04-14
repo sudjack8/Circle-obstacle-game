@@ -269,7 +269,7 @@
     let gameRunning;
     let lastSpawnTime, spawnInterval;
 		let minAllowedRadius, addRad;
-    let highestScore;
+    let highestScoreVar;
 
     function initializeGame() {
       circleX = width / 2;
@@ -460,7 +460,7 @@
     }
     
    async function saveScore(score) {
-    highestScore = 0;
+    highestScoreVar = 0;
   // Ensure user is authenticated before proceeding
   const user = firebase.auth().currentUser;
 
@@ -475,12 +475,12 @@
   userScoreRef.once("value")
     .then(snapshot => {
       const currentHighScore = snapshot.val()?.highScore || 0;
-      highestScore = currentHighScore;
+      highestScoreVar = currentHighScore;
 
       console.log("Current high score:", currentHighScore, "New score:", score);
 
       if (score > currentHighScore) {
-        highestScore = score;
+        highestScoreVar = score;
         return userScoreRef.set({ highScore: score });
         
       } else {
@@ -505,11 +505,11 @@
       
       const serverHighScore = await saveScore(score);
       
-      console.log("Server igh score:", highestScore, "New score:", score);
-      if (score > highestScore)
-       {highestScore = score;}
+      console.log("Server igh score:", highestScoreVar, "New score:", score);
+      if (score > highestScoreVar)
+       {highestScoreVar = score;}
       
-      highestScore.textContent = "Highest Score: " + highestScore;
+      highestScore.textContent = "Highest Score: " + highestScoreVar;
       
       gameOverMessage.textContent = message;
       gameOverScreen.style.display = "flex";
