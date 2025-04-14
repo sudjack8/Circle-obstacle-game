@@ -454,6 +454,50 @@
       draw();
       if (gameRunning) requestAnimationFrame(loop);
     }
+    
+    function saveScore(score) {
+    
+    firebase.database().ref("testConnection").set({
+  connected: true,
+  timestamp: Date.now()
+}).then(() => {
+  console.log("Realtime DB is connected and write was successful!");
+}).catch((error) => {
+  console.error("Realtime DB write failed:", error);
+});
+    
+    const username = localStorage.getItem("obstackle-username");
+    if (!username) {
+      console.warn("No username found in localStorage.");
+      return;
+    }
+
+    const userRef = firebase.database().ref("users/" + username);
+
+    userRef.once("value")
+      .then((snapshot) => {
+        const data = snapshot.val();
+        const currentHighScore = data && data.highScore ? data.highScore : 0;
+
+        console.log("Current high score:", currentHighScore, "New score:", score);
+
+        if (!data || score > currentHighScore) {
+          userRef.set({ highScore: score })
+            .then(() => {
+              console.log("High score saved to Realtime Database:", score);
+            })
+            .catch((error) => {
+              console.error("Error saving score:", error);
+            });
+        } else {
+          console.log("Score not higher than existing high score. No update needed.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }
+
 
     function endGame(message) {
       gameRunning = false;
@@ -556,51 +600,6 @@
   function showGameScreen() {
     document.getElementById("auth-container").style.display = "none";
     document.getElementById("game-container").style.display = "block";
-  }
-</script>
-
-<script>
-  function saveScore(score) {
-    
-    firebase.database().ref("testConnection").set({
-  connected: true,
-  timestamp: Date.now()
-}).then(() => {
-  console.log("Realtime DB is connected and write was successful!");
-}).catch((error) => {
-  console.error("Realtime DB write failed:", error);
-});
-    
-    const username = localStorage.getItem("obstackle-username");
-    if (!username) {
-      console.warn("No username found in localStorage.");
-      return;
-    }
-
-    const userRef = firebase.database().ref("users/" + username);
-
-    userRef.once("value")
-      .then((snapshot) => {
-        const data = snapshot.val();
-        const currentHighScore = data && data.highScore ? data.highScore : 0;
-
-        console.log("Current high score:", currentHighScore, "New score:", score);
-
-        if (!data || score > currentHighScore) {
-          userRef.set({ highScore: score })
-            .then(() => {
-              console.log("High score saved to Realtime Database:", score);
-            })
-            .catch((error) => {
-              console.error("Error saving score:", error);
-            });
-        } else {
-          console.log("Score not higher than existing high score. No update needed.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
   }
 </script>
 
