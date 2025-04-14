@@ -456,7 +456,7 @@
     }
     
     function saveScore(score) {
-    
+    console.log("saveScore called with score:", score);
     firebase.database().ref("testConnection").set({
   connected: true,
   timestamp: Date.now()
