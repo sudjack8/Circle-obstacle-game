@@ -254,11 +254,6 @@
     //const highestScore = document.getElementById('highestScore');
     const gameOverMessage = document.getElementById('gameOverMessage');
 		
-		
-    let width = window.innerWidth;
-    let height = window.innerHeight * 0.9;
-    canvas.width = width;
-    canvas.height = height;
 
     let circleX, initialRadius, radius;
     let growSpeed, growSpeed2, shrinkSpeed, shrinkSpeed2, moveSpeed;
@@ -269,6 +264,39 @@
     let lastSpawnTime, spawnInterval;
 		let minAllowedRadius, addRad;
     let highestScoreVar;
+    
+    // Get actual screen size
+let screenWidth = window.innerWidth;
+let screenHeight = window.innerHeight;
+
+// Declare target game area
+let gameWidth, gameHeight;
+
+if (screenHeight / screenWidth > 2) {
+    // Screen is taller than 2:1, crop height
+    gameWidth = screenWidth;
+    gameHeight = gameWidth * 2;
+    offsetY = (screenHeight - gameHeight) / 2;
+} else {
+    // Screen is wider than 2:1, crop width
+    gameHeight = screenHeight;
+    gameWidth = gameHeight / 2;
+    offsetX = (screenWidth - gameWidth) / 2;
+}
+
+// Set canvas size
+canvas.width = gameWidth;
+canvas.height = gameHeight;
+
+// Center canvas
+canvas.style.position = 'absolute';
+canvas.style.left = `${offsetX}px`;
+canvas.style.top = `${offsetY}px`;
+
+    let width = canvas.width;
+    let height = canvas.height * 0.9;
+
+
 
     function initializeGame() {
       circleX = width / 2;
