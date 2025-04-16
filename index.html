@@ -445,6 +445,10 @@ canvas.style.top = `${offsetY}px`;
           obs.passed = true;
           score++;
           scoreBox.textContent = `Score: ${score}`;
+          
+          // Remove obstacles that are off-screen and already passed
+				obstacles	= obstacles.filter(obs => (obs.y + offsetY + obstacleHeight) <= circleY - radius || !obs.passed);
+          
         }
       }
     }
