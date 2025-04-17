@@ -684,7 +684,7 @@ canvas.style.top = `${offsetY}px`;
   function loadTopScores() {
   const topScoresRef = firebase.database().ref("scores");
 
-  topScoresRef.orderByChild("highScore").limitToLast(5).once("value", snapshot => {
+  topScoresRef.orderByChild("highScore").limitToLast(1).once("value", snapshot => {
     const scores = [];
 
     snapshot.forEach(child => {
