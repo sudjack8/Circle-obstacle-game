@@ -358,13 +358,12 @@ canvas.style.top = `${offsetY}px`;
 
     function goHome() {
       gameOverScreen.style.display = "none";
+      loadTopScores(); // <-- add this here
       canvas.style.display = "none";
       document.getElementById('controls').style.display = "none";
       scoreBox.style.display = "none";
       homeScreen.style.display = "flex";
-      function goHome() {
-  showScreen("homeScreen");
-  loadTopScores(); // <-- add this here
+      loadTopScores(); // <-- add this here
 }
     }
 
