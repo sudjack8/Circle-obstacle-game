@@ -518,7 +518,7 @@ canvas.style.top = `${offsetY}px`;
   }
 
   const uid = user.uid;
-  const username = document.getElementById("usernameInput").value;
+  const username = user.displayName || "Anonymous";
   const userScoreRef = firebase.database().ref("scores/" + uid);
 
   userScoreRef.once("value")
@@ -637,9 +637,9 @@ canvas.style.top = `${offsetY}px`;
         // Signed up successfully
         
         localStorage.setItem("obstackle-username", username);
-        firebase.database().ref("users/" + username.uid).set({
-        usernam: username.displayName || "Anonymous"
-        });
+        firebase.auth().currentUser.updateProfile({
+        displayName: username
+});
         document.getElementById("signup-message").innerText = "";
         showGameScreen();
       })
@@ -664,9 +664,9 @@ canvas.style.top = `${offsetY}px`;
       .then((userCredential) => {
         // Logged in successfully
         localStorage.setItem("obstackle-username", username);
-        firebase.database().ref("users/" + username.uid).set({
-        usernam: username.displayName || "Anonymous"
-        });
+        firebase.auth().currentUser.updateProfile({
+        displayName: username
+});
         document.getElementById("auth-message").innerText = "";
         showGameScreen();
       })
