@@ -633,8 +633,8 @@ canvas.style.top = `${offsetY}px`;
         // Signed up successfully
         
         localStorage.setItem("obstackle-username", username);
-        firebase.database().ref("users/" + user.uid).set({
-        username: user.displayName || "Anonymous"
+        firebase.database().ref("users/" + username.uid).set({
+        usernam: username.displayName || "Anonymous"
         });
         document.getElementById("signup-message").innerText = "";
         showGameScreen();
@@ -660,8 +660,8 @@ canvas.style.top = `${offsetY}px`;
       .then((userCredential) => {
         // Logged in successfully
         localStorage.setItem("obstackle-username", username);
-        firebase.database().ref("users/" + user.uid).set({
-        username: user.displayName || "Anonymous"
+        firebase.database().ref("users/" + username.uid).set({
+        usernam: username.displayName || "Anonymous"
         });
         document.getElementById("auth-message").innerText = "";
         showGameScreen();
