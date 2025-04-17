@@ -59,13 +59,6 @@
        -moz-user-select: none;
        -ms-user-select: none;
     }
-    
-   #leaderboard {
-   color: #fff;
-   text-align: center;
-   margin-top: 30px;
-   display: block; /* force it to be visible */
-   }
 
    #topScores li {
    margin: 5px 0;
@@ -251,10 +244,7 @@
   <button id="rightBtn" class="rectBtn">→</button>
   </div>
   </div>
-  <div id="leaderboard" style="margin-top: 30px; color: #fff; text-align: center;">
-  <h3>Top 5 Players</h3>
-  <ul id="topScores" style="list-style: none; padding: 0; font-size: 18px;"></ul>
-  </div>
+
 
   <script>
     const canvas = document.getElementById('gameCanvas');
@@ -637,9 +627,9 @@ canvas.style.top = `${offsetY}px`;
         // Signed up successfully
         
         localStorage.setItem("obstackle-username", username);
-        firebase.auth().currentUser.updateProfile({
-        displayName: username
-});
+        //firebase.auth().currentUser.updateProfile({
+        //displayName: username
+//});
         document.getElementById("signup-message").innerText = "";
         showGameScreen();
       })
@@ -664,9 +654,9 @@ canvas.style.top = `${offsetY}px`;
       .then((userCredential) => {
         // Logged in successfully
         localStorage.setItem("obstackle-username", username);
-        firebase.auth().currentUser.updateProfile({
-        displayName: username
-});
+        //firebase.auth().currentUser.updateProfile({
+        //displayName: username
+//});
         document.getElementById("auth-message").innerText = "";
         showGameScreen();
       })
@@ -680,30 +670,7 @@ canvas.style.top = `${offsetY}px`;
     document.getElementById("auth-container").style.display = "none";
     document.getElementById("game-container").style.display = "block";
   }
-  
-  function loadTopScores() {
-  const topScoresRef = firebase.database().ref("scores");
 
-  topScoresRef.orderByChild("highScore").limitToLast(1).once("value", snapshot => {
-    const scores = [];
-
-    snapshot.forEach(child => {
-      scores.push(child.val());
-    });
-
-    // Firebase returns ascending, so we reverse to show top first
-    scores.sort((a, b) => b.highScore - a.highScore);
-
-    const topScoresList = document.getElementById("topScores");
-    topScoresList.innerHTML = ""; // Clear list
-
-    scores.forEach((entry, index) => {
-      const li = document.createElement("li");
-      li.textContent = ${index + 1}. ${entry.username || "Anonymous"} - ${entry.highScore};
-      topScoresList.appendChild(li);
-    });
-  });
-}
   
 </script>
 
