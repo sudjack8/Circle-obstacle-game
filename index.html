@@ -518,6 +518,7 @@ canvas.style.top = `${offsetY}px`;
   }
 
   const uid = user.uid;
+  const username = document.getElementById("usernameInput").value;
   const userScoreRef = firebase.database().ref("scores/" + uid);
 
   userScoreRef.once("value")
@@ -529,7 +530,10 @@ canvas.style.top = `${offsetY}px`;
 
       if (score > currentHighScore) {
         highestScoreVar = score;
-        return userScoreRef.set({ highScore: score });
+        return userScoreRef.set({
+          highScore: score,
+          username: username
+        });
         
       } else {
         console.log("Score is not higher. No update needed.");
