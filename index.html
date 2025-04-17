@@ -684,33 +684,25 @@ canvas.style.top = `${offsetY}px`;
   function loadTopScores() {
   const topScoresRef = firebase.database().ref("scores");
 
-  topScoresRef.orderByChild("highScore").limitToLast(5).once("value")
-    .then(async snapshot => {
-      const scoreEntries = [];
+  topScoresRef.orderByChild("highScore").limitToLast(5).once("value", snapshot => {
+    const scores = [];
 
-      snapshot.forEach(child => {
-        scoreEntries.push({ uid: child.key, highScore: child.val().highScore });
-      });
-
-      // Sort descending since Firebase returns ascending order
-      scoreEntries.sort((a, b) => b.highScore - a.highScore);
-
-      const topScoresList = document.getElementById("topScores");
-      topScoresList.innerHTML = ""; // Clear list
-
-      for (let i = 0; i < scoreEntries.length; i++) {
-        const entry = scoreEntries[i];
-        const userSnapshot = await firebase.database().ref("users/" + entry.uid).once("value");
-        const username = userSnapshot.val()?.username || "Anonymous";
-
-        const li = document.createElement("li");
-        li.textContent = `${i + 1}. ${username} - ${entry.highScore}`;
-        topScoresList.appendChild(li);
-      }
-    })
-    .catch(error => {
-      console.error("Error loading top scores:", error);
+    snapshot.forEach(child => {
+      scores.push(child.val());
     });
+
+    // Firebase returns ascending, so we reverse to show top first
+    scores.sort((a, b) => b.highScore - a.highScore);
+
+    const topScoresList = document.getElementById("topScores");
+    topScoresList.innerHTML = ""; // Clear list
+
+    scores.forEach((entry, index) => {
+      const li = document.createElement("li");
+      li.textContent = ${index + 1}. ${entry.username || "Anonymous"} - ${entry.highScore};
+      topScoresList.appendChild(li);
+    });
+  });
 }
   
 </script>
