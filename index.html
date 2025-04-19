@@ -9,7 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 
 <!-- Firebase Firestore SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
 
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
@@ -17,19 +17,19 @@
 <script>
   // Your web app's Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyA8L3gVXfw63UtpIHWLJOdqXxrMGM0lSZg",
-    authDomain: "obstackledb.firebaseapp.com",
-    databaseURL: "https://obstackledb-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "obstackledb",
-    storageBucket: "obstackledb.firebasestorage.app",
-    messagingSenderId: "741143724512",
-    appId: "1:741143724512:web:d99efe0e8ec107f289eb85"
-  };
-
+  apiKey: "AIzaSyA8L3gVXfw63UtpIHWLJOdqXxrMGM0lSZg",
+  authDomain: "obstackledb.firebaseapp.com",
+  databaseURL: "https://obstackledb-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "obstackledb",
+  storageBucket: "obstackledb.firebasestorage.app",
+  messagingSenderId: "741143724512",
+  appId: "1:741143724512:web:d99efe0e8ec107f289eb85"
+};
+  
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   
-  const db = firebase.firestore();
+  //const db = firebase.firestore();
   const database = firebase.database();
   
 </script>
@@ -82,34 +82,49 @@
     }
 		
 		#controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 10%;
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  padding: 0 10px;
+  align-items: center;
+  padding: 0;
   box-sizing: border-box;
-	user-select: none;
-       -webkit-user-select: none;
-       -moz-user-select: none;
-       -ms-user-select: none;
+  background: transparent;
+  pointer-events: none;
 }
 
-.rectBtn {
-  flex: 1;
-  height: 50px;
-  margin: 0 5px;
+.control-btn {
+  height: 100%;
+  border: none;
   font-size: 24px;
   font-weight: bold;
   background-color: #444;
   color: white;
-  border: none;
+  pointer-events: auto;
+}
+
+#leftBtn {
+  width: 35%;
+  border-radius: 0 10px 10px 0;
+}
+
+#shrinkBtn {
+  width: 30%;
   border-radius: 10px;
-	user-select: none;
-       -webkit-user-select: none;
-       -moz-user-select: none;
-       -ms-user-select: none;
+  margin: 0 2.5%;
+}
+
+#rightBtn {
+  width: 35%;
+  border-radius: 10px 0 0 10px;
+}
+
+#leftBtn, #rightBtn, #shrinkBtn {
+  z-index: 9999;
+  pointer-events: auto;
 }
 
     #homeScreen {
@@ -122,7 +137,8 @@
       color: white;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
+      padding-top: 40px;
       align-items: center;
       z-index: 100;
 			user-select: none;
@@ -130,6 +146,19 @@
        -moz-user-select: none;
        -ms-user-select: none;
     }
+
+    #leaderboard {
+  margin-top: 20px;
+  background-color: #222;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 80%;
+  max-width: 400px;
+  text-align: left;
+  margin-bottom: 20px; /* Space between leaderboard and title */
+}
 
     #gameOverScreen {
       position: absolute;
@@ -149,8 +178,37 @@
        -moz-user-select: none;
        -ms-user-select: none;
     }
+    
+    #homeScreen button {
+  padding: 14px 30px;
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #f0f0f0;
+  background: linear-gradient(145deg, #6c757d, #343a40);
+  border: 2px solid #9ea2a8;
+  border-radius: 10px;
+  box-shadow: inset 1px 1px 0 #ffffff55,
+              inset -1px -1px 0 #00000055,
+              4px 4px 8px #00000088;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
-    #homeScreen button, #gameOverScreen button {
+#homeScreen button:hover {
+  background: linear-gradient(145deg, #7a8288, #2c3035);
+  box-shadow: inset 2px 2px 4px #ffffff33,
+              inset -2px -2px 4px #00000066,
+              2px 2px 6px #000000aa;
+  transform: translateY(-2px);
+}
+
+#homeScreen button:active {
+  box-shadow: inset 1px 1px 2px #00000088;
+  transform: translateY(1px);
+}
+
+    #gameOverScreen button {
       padding: 12px 24px;
       margin-top: 20px;
       font-size: 18px;
@@ -163,6 +221,17 @@
        -moz-user-select: none;
        -ms-user-select: none;
     }
+
+    #leaderboard li {
+    padding: 5px 0;
+    border-bottom: 1px solid #444;
+    color: #ccc;
+}
+
+   #leaderboard li span {
+   font-weight: bold;
+   color: #fff;
+} 
 
     #gameOverMessage {
       font-size: 24px;
@@ -186,34 +255,11 @@
 	<!-- Auth Container -->
 <div id="auth-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: Arial, sans-serif;">
 
-  <!-- Login Box -->
-  <div id="show-login">Login</div>
-  <div id="login-box" style="border: 1px solid #ccc; padding: 30px; border-radius: 10px; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <h2 style="text-align: center; color: #d3d3d3; ">Login to Obstackle</h2>
-    <input type="text" id="login-username" placeholder="Username" style="width: 100%; margin: 10px 0; padding: 10px;">
-    <input type="password" id="login-password" placeholder="Password" style="width: 100%; margin: 10px 0; padding: 10px;">
-    <button onclick="login()" style="width: 100%; padding: 10px; background-color: #4285f4; color: white; border: none; border-radius: 5px;">Login</button>
-    <p style="margin-top: 15px; text-align: center; color: #d3d3d3;">
-      Don’t have an account? 
-      <span style="color: #4285f4; cursor: pointer;" onclick="toggleAuth()">Sign up here</span>
-    </p>
-    <p id="auth-message" style="color: red; text-align: center;"></p>
-  </div>
-
-  <!-- Signup Box (Hidden Initially) -->
-  <div id="show-signup">Login</div>
-  <div id="signup-box" style="display: none; border: 1px solid #ccc; padding: 30px; border-radius: 10px; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <h2 style="text-align: center; color: #d3d3d3;">Create Account</h2>
-    <input type="text" id="signup-username" placeholder="Username" style="width: 100%; margin: 10px 0; padding: 10px;">
-    <input type="password" id="signup-password" placeholder="Password" style="width: 100%; margin: 10px 0; padding: 10px;">
-    <button onclick="signUp()" style="width: 100%; padding: 10px; background-color: #34a853; color: white; border: none; border-radius: 5px;">Sign Up</button>
-    <p style="margin-top: 15px; text-align: center;">
-      Already have an account? 
-      <span style="color: #34a853; cursor: pointer;" onclick="toggleAuth()">Login here</span>
-    </p>
-    <p id="signup-message" style="color: red; text-align: center;"></p>
-  </div>
-
+ <h2>Firebase Google Sign-In</h2>
+    <button id="sign-in">Sign In with Google</button>
+    <button id="sign-out" hidden>Sign Out</button>
+    <p id="user-info"></p>
+    
 </div>
 
 	
@@ -222,6 +268,7 @@
   <!-- Your existing game.html content starts here -->
 	
   <div id="homeScreen">
+    <div id="leaderboard"></div>
     <h1>Obstackle</h1>
     <button onclick="startGame()">Start Game</button>
   </div>
@@ -238,11 +285,12 @@
 
   <div id="scoreBox">Score: 0</div>
 
-  <div id="controls">
-  <button id="leftBtn" class="rectBtn">←</button>
-  <button id="shrinkBtn" class="rectBtn">o</button>
-  <button id="rightBtn" class="rectBtn">→</button>
-  </div>
+ <div id="controls">
+  <button id="leftBtn" class="control-btn">←</button>
+  <button id="shrinkBtn" class="control-btn">o</button>
+  <button id="rightBtn" class="control-btn">→</button>
+</div>
+  
   </div>
 
 
@@ -264,7 +312,7 @@
     let growSpeed, growSpeed2, shrinkSpeed, shrinkSpeed2, moveSpeed;
     let shrink, moveLeft, moveRight;
     let obstacleHeight, spaceBetweenObstacles, obstacles;
-    let scrollSpeed, speed, speedIncrement, worldY, offsetY, score, newobs;
+    let scrollSpeed, speed, speedIncrement, worldY, offsetX = 0, offsetY = 0, score, newobs;
     let gameRunning;
     let lastSpawnTime, spawnInterval;
 		let minAllowedRadius, addRad;
@@ -301,7 +349,11 @@ canvas.style.top = `${offsetY}px`;
     let width = canvas.width;
     let height = canvas.height * 0.9;
 
-
+    function vibrateTouch() {
+    if (navigator.vibrate) {
+      navigator.vibrate(50); // vibrate for 50ms
+    }
+  }
 
     function initializeGame() {
       circleX = width / 2;
@@ -361,6 +413,7 @@ canvas.style.top = `${offsetY}px`;
       gameOverScreen.style.display = "none";
       canvas.style.display = "none";
       //loadTopScores();
+      loadLeaderboard();
       document.getElementById('controls').style.display = "none";
       scoreBox.style.display = "none";
       homeScreen.style.display = "flex";
@@ -454,7 +507,7 @@ canvas.style.top = `${offsetY}px`;
           scoreBox.textContent = `Score: ${score}`;
           
           // Remove obstacles that are off-screen and already passed
-				obstacles	= obstacles.filter(obs => (obs.y + offsetY + obstacleHeight) <= circleY - radius || !obs.passed);
+				obstacles	= obstacles.filter(obs => (obs.y + offsetY) <= circleY - radius - obstacleHeight || !obs.passed);
           
         }
       }
@@ -570,109 +623,97 @@ canvas.style.top = `${offsetY}px`;
     }); // <-- Closing .then
 } // <-- Closing endGame function
 
-    shrinkBtn.addEventListener('touchstart', e => { e.preventDefault(); shrink = true; });
+
+  function loadLeaderboard() {
+  
+    const scoresRef = firebase.database().ref("scores");
+
+scoresRef.once("value")
+  .then(snapshot => {
+    const scoresData = snapshot.val();
+    if (!scoresData) {
+      console.warn("No scores data available.");
+      return;
+    }
+
+    // Convert to array and sort by highScore descending
+    const sortedPlayers = Object.values(scoresData)
+      .sort((a, b) => b.highScore - a.highScore)
+      .slice(0, 5); // Take top 5
+
+    // Create leaderboard HTML
+    let leaderboardHTML = "<h3>Top 5 Players</h3><ol>";
+    sortedPlayers.forEach(player => {
+      leaderboardHTML += `<li>${player.username}: ${player.highScore}</li>`;
+    });
+    leaderboardHTML += "</ol>";
+
+    // Insert into leaderboard container
+    const leaderboardContainer = document.getElementById("leaderboard");
+    if (leaderboardContainer) {
+      leaderboardContainer.innerHTML = leaderboardHTML;
+    } else {
+      console.warn("Leaderboard container not found.");
+    }
+  })
+  .catch(error => {
+    console.error("Error fetching leaderboard:", error);
+  });
+  }
+
+// Call on page load
+window.addEventListener('load', loadLeaderboard);
+window.startGame = startGame;
+
+    shrinkBtn.addEventListener('touchstart', e => { vibrateTouch();
+ e.preventDefault(); shrink = true; });
     shrinkBtn.addEventListener('touchend', e => { e.preventDefault(); shrink = false; });
-    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); moveLeft = true; });
+    leftBtn.addEventListener('touchstart', e => { vibrateTouch();
+ e.preventDefault(); moveLeft = true; });
     leftBtn.addEventListener('touchend', e => { e.preventDefault(); moveLeft = false; });
-    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); moveRight = true; });
+    rightBtn.addEventListener('touchstart', e => { vibrateTouch();
+ e.preventDefault(); moveRight = true; });
     rightBtn.addEventListener('touchend', e => { e.preventDefault(); moveRight = false; });
   </script>
 	
-	<script>
-  function toggleAuth() {
-    const loginBox = document.getElementById('login-box');
-    const signupBox = document.getElementById('signup-box');
+<script>
+  const auth = firebase.auth();
+  const provider = new firebase.auth.GoogleAuthProvider();
 
-    if (loginBox.style.display === 'none') {
-      loginBox.style.display = 'block';
-      signupBox.style.display = 'none';
+  const signInButton = document.getElementById('sign-in');
+  const signOutButton = document.getElementById('sign-out');
+  const userInfo = document.getElementById('user-info');
+
+  signInButton.addEventListener('click', () => {
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        console.log('Signed in:', result.user);
+      })
+      .catch((error) => {
+        console.error('Sign-in error:', error);
+      });
+  });
+
+  signOutButton.addEventListener('click', () => {
+    auth.signOut();
+  });
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      signInButton.hidden = true;
+      signOutButton.hidden = false;
+      userInfo.textContent = `Hello, ${user.displayName}`;
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('game-container').style.display = 'block';
     } else {
-      loginBox.style.display = 'none';
-      signupBox.style.display = 'block';
+      signInButton.hidden = false;
+      signOutButton.hidden = true;
+      userInfo.textContent = '';
+      document.getElementById('auth-container').style.display = 'flex';
+      document.getElementById('game-container').style.display = 'none';
     }
-  }
-</script>
-	
-	<script>
-  document.getElementById('show-signup').addEventListener('click', function (e) {
-    e.preventDefault();
-    document.getElementById('login-box').style.display = 'none';
-    document.getElementById('signup-box').style.display = 'block';
-  });
-
-  document.getElementById('show-login').addEventListener('click', function (e) {
-    e.preventDefault();
-    document.getElementById('signup-box').style.display = 'none';
-    document.getElementById('login-box').style.display = 'block';
   });
 </script>
-	
- <script>
-
-  // SIGN UP FUNCTION
-  function signUp() {
-    const username = document.getElementById("signup-username").value.trim();
-    const password = document.getElementById("signup-password").value;
-
-    if (!username || !password) {
-      document.getElementById("signup-message").innerText = "Please fill in all fields.";
-      return;
-    }
-
-    // Use email format by appending domain to username
-    const email = username + "@obstackle.com";
-
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed up successfully
-        
-        localStorage.setItem("obstackle-username", username);
-        //firebase.auth().currentUser.updateProfile({
-        //displayName: username
-//});
-        document.getElementById("signup-message").innerText = "";
-        showGameScreen();
-      })
-      .catch((error) => {
-        document.getElementById("signup-message").innerText = error.message;
-      });
-  }
-  
-  // LOGIN FUNCTION
-  function login() {
-    const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value;
-
-    if (!username || !password) {
-      document.getElementById("auth-message").innerText = "Please fill in all fields.";
-      return;
-    }
-
-    const email = username + "@obstackle.com";
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Logged in successfully
-        localStorage.setItem("obstackle-username", username);
-        //firebase.auth().currentUser.updateProfile({
-        //displayName: username
-//});
-        document.getElementById("auth-message").innerText = "";
-        showGameScreen();
-      })
-      .catch((error) => {
-        document.getElementById("auth-message").innerText = error.message;
-      });
-  }
-
-  // Show Game Screen and hide auth screen
-  function showGameScreen() {
-    document.getElementById("auth-container").style.display = "none";
-    document.getElementById("game-container").style.display = "block";
-  }
-
-  
-</script>
+ 
 
 </body>
-</html>
